@@ -10,9 +10,10 @@ import AdminLogin from './components/users/admin/AdminLogin';
 import AdminDashboard from './components/users/admin/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import BookAppointment from './components/users/patient/BookAppointment';
-import ToggleMode from './components/ToggleMode';
-import { ThemeProvider } from './components/ThemeContext';
-import './components/theme.css';
+import PatientProfile from './components/users/patient/PatientProfile';
+import DoctorProfile from './components/users/doctor/DoctorProfile';
+import DoctorMeetings from './components/users/doctor/DoctorMeetings';
+import NotFound404 from './components/NotFound404'
 
 function App() {
   return (
@@ -29,6 +30,15 @@ function App() {
           element={
             <ProtectedRoute requiredRole="patient">
               <PatientDashboard />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route 
+          path="/patient-dashboard/patient-profile" 
+          element={
+            <ProtectedRoute requiredRole="patient">
+              <PatientProfile />
             </ProtectedRoute>
           }
         />
@@ -55,6 +65,24 @@ function App() {
           }
         />
         
+        <Route
+          path="/doctor-dashboard/doctor-profile"
+          element={
+            <ProtectedRoute requiredRole="doctor">
+              <DoctorProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+        path="/doctor-dashboard/doctor-Meetings"
+        element={
+          <ProtectedRoute requiredRole="doctor">
+            <DoctorMeetings/>
+          </ProtectedRoute>
+        }
+        />
+        
         {/* Admin Routes */}
         <Route path="/loginAdmin" element={<AdminLogin />} />
         <Route
@@ -65,6 +93,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        
+        <Route path='*' element={<NotFound404/>} />
       </Routes>
     </Router>
     <ToggleMode/>
