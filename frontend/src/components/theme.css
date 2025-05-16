@@ -170,3 +170,26 @@ body.dark-mode .appointment-card {
     box-shadow: var(--card-shadow-dark);
     border: 1px solid var(--border-color-dark);
 }
+
+
+body.dark-mode .logo-tagline {
+    color: var(--text-primary-dark);
+}
+
+.logo-tagline {
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.hero-title, 
+.hero-subtitle, 
+.hero-tagline {
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .hero-title,
+body.dark-mode .hero-subtitle,
+body.dark-mode .hero-tagline {
+    color: var(--text-primary-dark);
+}
