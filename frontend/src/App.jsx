@@ -13,7 +13,9 @@ import BookAppointment from './components/users/patient/BookAppointment';
 import PatientProfile from './components/users/patient/PatientProfile';
 import DoctorProfile from './components/users/doctor/DoctorProfile';
 import DoctorMeetings from './components/users/doctor/DoctorMeetings';
-import NotFound404 from './components/NotFound404'
+import NotFound404 from './components/NotFound404';
+import { ThemeProvider } from './components/ThemeContext';
+import ToggleMode from './components/ToggleMode';
 
 function App() {
   return (
