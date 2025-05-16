@@ -10,9 +10,13 @@ import AdminLogin from './components/users/admin/AdminLogin';
 import AdminDashboard from './components/users/admin/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import BookAppointment from './components/users/patient/BookAppointment';
+import ToggleMode from './components/ToggleMode';
+import { ThemeProvider } from './components/ThemeContext';
+import './components/theme.css';
 
 function App() {
   return (
+    <ThemeProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -63,6 +67,8 @@ function App() {
         />
       </Routes>
     </Router>
+    <ToggleMode/>
+    </ThemeProvider>
   );
 }
 

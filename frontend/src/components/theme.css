@@ -1,0 +1,172 @@
+:root {
+    /* Light theme variables */
+    --primary-color: #1c3927;
+    --background-primary: #ffffff;
+    --background-secondary: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border-color: #eee;
+    --card-bg: #ffffff;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --hover-color: #42c986;
+    --button-color: #1a73e8;
+
+    /* Dark theme variables - Updated with navy blue scheme */
+    --primary-color-dark: #1a73e8;          /* Blue for buttons */
+    --background-primary-dark: #000080;      /* Navy blue for body */
+    --background-secondary-dark: #000000;    /* Black for header/footer */
+    --text-primary-dark: #ffffff;            /* White text */
+    --text-secondary-dark: #e0e0e0;         /* Light grey text */
+    --border-color-dark: #1a1a3a;           /* Darker navy for borders */
+    --card-bg-dark: #000066;                /* Lighter navy for cards */
+    --card-shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --hover-color-dark: #2196f3;            /* Lighter blue for hover */
+    --container-bg: #f5f8f6;              /* Light whitish-green */
+    --container-bg-dark: #000080;         /* Navy blue for dark mode */
+    --card-text-dark: #42c986;  /* Green text color for dark mode cards */
+}
+
+/* General styles */
+body {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    min-height: 100vh;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: var(--background-primary-dark);
+    color: var(--text-primary-dark);
+}
+
+/* Header and Footer styles */
+header, footer {
+    background-color: var(--background-secondary);
+    padding: 15px;
+}
+
+body.dark-mode header,
+body.dark-mode footer {
+    background-color: var(--background-secondary-dark);
+    color: var(--text-primary-dark);
+}
+
+/* Card styles */
+.dashboard-card, 
+.appointment-card {
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    padding: 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .dashboard-card,
+body.dark-mode .appointment-card {
+    background-color: var(--card-bg-dark);
+    box-shadow: var(--card-shadow-dark);
+    border: 1px solid var(--border-color-dark);
+}
+
+/* Text styles */
+body.dark-mode .dashboard-card h1,
+body.dark-mode .dashboard-card h2,
+body.dark-mode .dashboard-card h3,
+body.dark-mode .dashboard-card h4,
+body.dark-mode .dashboard-card h5,
+body.dark-mode .dashboard-card h6,
+body.dark-mode .dashboard-card p,
+body.dark-mode .dashboard-card span,
+body.dark-mode .dashboard-card label,
+body.dark-mode .appointment-card h1,
+body.dark-mode .appointment-card h2,
+body.dark-mode .appointment-card h3,
+body.dark-mode .appointment-card h4,
+body.dark-mode .appointment-card h5,
+body.dark-mode .appointment-card h6,
+body.dark-mode .appointment-card p,
+body.dark-mode .appointment-card span,
+body.dark-mode .appointment-card label {
+    color: var(--card-text-dark);
+}
+/* Button styles */
+.action-button {
+    background-color: var(--button-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+body.dark-mode .action-button {
+    background-color: var(--primary-color-dark);
+}
+
+.action-button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+body.dark-mode .action-button:hover {
+    background-color: var(--hover-color-dark);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 1000;
+    background: var(--background-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .theme-toggle {
+    background: var(--background-secondary-dark);
+    color: var(--text-primary-dark);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.container,
+.dashboard-content,
+.doctor-dashboard,
+.patient-dashboard,
+.admin-dashboard,
+main,
+.section,
+.content-wrapper {
+    background-color: var(--container-bg);
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .container,
+body.dark-mode .dashboard-content,
+body.dark-mode .doctor-dashboard,
+body.dark-mode .patient-dashboard,
+body.dark-mode .admin-dashboard,
+body.dark-mode main,
+body.dark-mode .section,
+body.dark-mode .content-wrapper {
+    background-color: var(--container-bg-dark);
+}
+
+/* Update card styles for better contrast */
+body.dark-mode .dashboard-card,
+body.dark-mode .appointment-card {
+    background-color: var(--card-bg-dark);
+    box-shadow: var(--card-shadow-dark);
+    border: 1px solid var(--border-color-dark);
+}
