@@ -1,0 +1,77 @@
+.header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--background-primary);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 100;
+}
+
+/* Remove duplicate dark mode styles and keep one consistent version */
+body.dark-mode .header {
+    background-color: #000000 !important;
+    border-color: var(--border-color-dark);
+}
+
+.logo {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-item {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+/* Update dark mode styles */
+body.dark-mode .header {
+    background-color: var(--background-primary-dark);
+    border-color: var(--border-color-dark);
+}
+
+body.dark-mode .logo h1,
+body.dark-mode .nav-item,
+body.dark-mode button {
+    color: #42c986 !important; /* Force green color for all buttons and text */
+}
+
+body.dark-mode .nav button,
+body.dark-mode .logout-button {
+    border-color: #42c986;
+    color: #42c986 !important;
+}
+
+body.dark-mode .nav-item:hover,
+body.dark-mode button:hover {
+    color: #ffffff !important;
+    background-color: #42c986;
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+    
+    .nav {
+        gap: 1rem;
+    }
+}

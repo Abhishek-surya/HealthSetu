@@ -1,0 +1,207 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { useTheme } from '../../ThemeContext';
+import Header from '../../common/Header';
+import './DoctorDashboard.css';
+
+function DoctorDashboard() {
+  const navigate = useNavigate();
+  const { darkMode } = useTheme();
+  const [doctorName] = useState(localStorage.getItem('name') || '');
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [scheduleLoading, setScheduleLoading] = useState({});
+  const [cancelLoading, setCancelLoading] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    const status = localStorage.getItem('status');
+    if (!token || role !== 'doctor' || status !== 'approved') {
+      navigate('/loginDoctor');
+      return;
+    }
+    fetchAppointments();
+  }, [navigate]);
+
+  const fetchAppointments = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        'http://localhost:8080/api/auth/doctor-dashboard/appointments',
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const pendingAppointments = response.data.appointments
+        .filter((a) => a.status === 'pending')
+        .map((a) => ({ ...a, scheduledDate: '', scheduledTime: '' }));
+      setAppointments(pendingAppointments);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      alert('Failed to fetch appointments.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSchedule = async (appointmentId, patientId, date, time) => {
+    if (!date || !time) {
+      alert('Please select both date and time!');
+      return;
+    }
+    
+    setScheduleLoading(prev => ({ ...prev, [appointmentId]: true }));
+    const token = localStorage.getItem('token');
+    const scheduledDateTime = new Date(`${date}T${time}:00`).toISOString();
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/doctor-dashboard/scheduleAppointments',
+        { doctorName, patientId, appointmentId, scheduledDateTime },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert(response.data.message);
+      fetchAppointments();
+    } catch (error) {
+      console.error('Error scheduling appointment:', error);
+      alert('Failed to schedule appointment.');
+    } finally {
+      setScheduleLoading(prev => ({ ...prev, [appointmentId]: false }));
+    }
+  };
+
+  const handleCancel = async (appointmentId) => {
+    const reason = prompt('Please enter the reason for cancellation:');
+    if (!reason) return;
+
+    setCancelLoading(true);
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/doctor-dashboard/cancelAppointment',
+        { appointmentId, reason },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert(response.data.message);
+      fetchAppointments();
+    } catch (error) {
+      console.error('Error cancelling appointment:', error);
+      alert('Failed to cancel appointment.');
+    } finally {
+      setCancelLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/loginDoctor');
+  };
+
+  const navItems = [
+    {
+      label: 'Meetings',
+      onClick: () => navigate('/doctor-dashboard/doctor-Meetings')
+    },
+    {
+      label: 'Profile',
+      onClick: () => navigate('/doctor-dashboard/doctor-profile')
+    }
+  ];
+
+  return (
+    <div className={`dashboard-container ${darkMode ? 'dark-mode' : ''}`}>
+      <Header 
+        navItems={navItems} 
+        onLogout={handleLogout}
+        userRole="doctor"
+      />
+
+      <main className="dashboard-content">
+        <section className="welcome-section">
+          <h1>Welcome to HealthSetu, Dr. {doctorName}!</h1>
+          <p>Your dashboard to manage appointments and more</p>
+        </section>
+
+        <section className="appointments-section">
+          <h2>Pending Appointments</h2>
+          {loading ? (
+            <p>Loading appointments...</p>
+          ) : appointments.length === 0 ? (
+            <p>No pending appointments.</p>
+          ) : (
+            <div className="appointments-grid">
+              {appointments.map((appointment) => (
+                <div key={appointment._id} className="appointment-card">
+                  <p>Appointment with {appointment.patient?.name}</p>
+                  <p>Reason: {appointment.reason}</p>
+
+                  <label>
+                    Select Date:
+                    <input
+                      type="date"
+                      value={appointment.scheduledDate}
+                      onChange={(e) => {
+                        const updatedAppointments = appointments.map(a =>
+                          a._id === appointment._id
+                            ? { ...a, scheduledDate: e.target.value }
+                            : a
+                        );
+                        setAppointments(updatedAppointments);
+                      }}
+                    />
+                  </label>
+
+                  <label>
+                    Select Time:
+                    <input
+                      type="time"
+                      value={appointment.scheduledTime}
+                      onChange={(e) => {
+                        const updatedAppointments = appointments.map(a =>
+                          a._id === appointment._id
+                            ? { ...a, scheduledTime: e.target.value }
+                            : a
+                        );
+                        setAppointments(updatedAppointments);
+                      }}
+                    />
+                  </label>
+
+                  <button
+                    className="action-button"
+                    onClick={() =>
+                      handleSchedule(
+                        appointment._id,
+                        appointment.patient._id,
+                        appointment.scheduledDate,
+                        appointment.scheduledTime
+                      )
+                    }
+                    disabled={scheduleLoading[appointment._id]}
+                  >
+                    {scheduleLoading[appointment._id] ? 'Scheduling...' : 'Schedule'}
+                  </button>
+
+                  <button
+                    className="action-button cancel"
+                    onClick={() => handleCancel(appointment._id)}
+                    disabled={cancelLoading}
+                  >
+                    {cancelLoading ? 'Cancelling...' : 'Cancel'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+
+      <footer className="dashboard-footer">
+        <p>© 2025 HealthSetu. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
+
+export default DoctorDashboard;
